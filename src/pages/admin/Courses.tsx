@@ -581,39 +581,55 @@ const handleSubmit = async (e: React.FormEvent) => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {courses.map(course => (
-              <tr key={course._id} className="hover:bg-gray-50">
-                <td className="px-6 py-4">
-                  <div className="text-sm font-medium text-gray-900">{course.name}</div>
-                  <div className="text-sm text-gray-500">Code: {course.code}</div>
-                  <div className="text-sm text-gray-500">Credits: {course.credits}</div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="text-sm text-gray-900">{course.department}</div>
-                  <div className="text-sm text-gray-500">Semester {course.semester}</div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="text-sm text-gray-900">{course.teacher.name}</div>
-                  <div className="text-sm text-gray-500">{course.teacher.email}</div>
-                </td>
-                <td className="px-6 py-4">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                    ${course.status === 'active' ? 'bg-green-100 text-green-800' : 
-                      course.status === 'inactive' ? 'bg-yellow-100 text-yellow-800' : 
-                      'bg-red-100 text-red-800'}`}>
-                    {course.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm font-medium">
-                  <button
-                    onClick={() => deleteCourse(course._id)}
-                    className="text-red-600 hover:text-red-900"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+
+          {courses.length > 0 ? (
+  courses.map(course => (
+    <tr key={course._id} className="hover:bg-gray-50 transition duration-200">
+      <td className="px-6 py-4">
+        <div className="text-sm font-medium text-gray-900">{course.name}</div>
+        <div className="text-sm text-gray-500">Code: {course.code}</div>
+        <div className="text-sm text-gray-500">Credits: {course.credits}</div>
+      </td>
+      <td className="px-6 py-4">
+        <div className="text-sm text-gray-900">{course.department}</div>
+        <div className="text-sm text-gray-500">Semester {course.semester}</div>
+      </td>
+      <td className="px-6 py-4">
+        <div className="text-sm text-gray-900">{course.teacher?.name || 'N/A'}</div>
+        <div className="text-sm text-gray-500">{course.teacher?.email || 'N/A'}</div>
+      </td>
+      <td className="px-6 py-4">
+        <span
+          className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
+            ${course.status === 'active' ? 'bg-green-100 text-green-800' : 
+              course.status === 'inactive' ? 'bg-yellow-100 text-yellow-800' : 
+              'bg-red-100 text-red-800'}`}
+        >
+          {course.status}
+        </span>
+      </td>
+      <td className="px-6 py-4 text-sm font-medium">
+        <button
+          onClick={() => handleDelete(course._id)}
+          className="text-red-600 hover:text-red-900"
+          aria-label={`Delete ${course.name}`}
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  ))
+) : (
+  <tr>
+    <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
+      No courses available.
+    </td>
+  </tr>
+)}
+
+
+
+
           </tbody>
         </table>
       </div>

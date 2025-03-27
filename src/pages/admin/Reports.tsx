@@ -25,7 +25,7 @@ const Reports: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [alert, setAlert] = useState<AlertProps | null>(null);
-  const [reportType, setReportType] = useState<'attendance' | 'marks' | 'event'>('attendance');
+  const [reportType, setReportType] = useState<'attendance' | 'marks' | 'event'>('event');
   const [dateRange, setDateRange] = useState({
     startDate: '',
     endDate: ''
@@ -83,6 +83,17 @@ const Reports: React.FC = () => {
         if (!details.length) return 'No data available';
         
         switch (report.type) {
+
+
+          case 'event':
+            return details.map(d =>
+              `Event: ${d.eventName}
+               Type: ${d.type}
+               Date: ${new Date(d.date).toLocaleDateString()}
+               Participants: ${d.participants.length}
+               Names: ${d.participants.join(', ')}`
+            ).join('\n\n');
+
           case 'attendance':
             return details.map(d => 
               `Student: ${d.studentName}
@@ -101,14 +112,7 @@ const Reports: React.FC = () => {
                Average: ${d.average?.toFixed(2)}`
             ).join('\n\n');
           
-          case 'event':
-            return details.map(d =>
-              `Event: ${d.eventName}
-               Type: ${d.type}
-               Date: ${new Date(d.date).toLocaleDateString()}
-               Participants: ${d.participants.length}
-               Names: ${d.participants.join(', ')}`
-            ).join('\n\n');
+          
           
           default:
             return JSON.stringify(details, null, 2);
@@ -254,12 +258,13 @@ const Reports: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
           <select
             value={reportType}
-            onChange={(e) => setReportType(e.target.value as 'attendance' | 'marks' | 'event')}
+            onChange={(e) => setReportType(e.target.value as 'event' | 'marks' | 'attendance')}
             className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           >
+            <option value="event">Event Participation Report</option>
             <option value="attendance">Attendance Report</option>
             <option value="marks">Marks Report</option>
-            <option value="event">Event Participation Report</option>
+            
           </select>
 
           <input
